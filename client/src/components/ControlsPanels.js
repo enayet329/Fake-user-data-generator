@@ -43,7 +43,7 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
             </Typography>  
             <Box display={'flex'} alignItems="center">  
               <Slider  
-                value={errorRate.slider}  
+                value={errorRate.input}  
                 onChange={handleSliderChange}  
                 aria-labelledby="error-rate-slider"  
                 valueLabelDisplay="auto"  
