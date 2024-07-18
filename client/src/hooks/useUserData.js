@@ -1,13 +1,12 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { introduceErrorInPhonenumber, introduceErrors } from './errorUtils';
+import { introduceErrorInPhonenumber, introduceErrors } from '../hooks/errorUtils';
 
 const useUserData = () => {
   const [users, setUsers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
   const [region, setRegion] = useState('USA');
-  const [errorRate, setErrorRate] = useState(0);
+  const [errorRate, setErrorRate] = useState({ slider: 0, input: 0 });
   const [seed, setSeed] = useState(42);
   const [page, setPage] = useState(1);
 
@@ -21,12 +20,10 @@ const useUserData = () => {
           page: newPage,
         },
       });
-
       const fetchedUsers = response.data.users.map((user, index) => ({
         ...user,
         index: (newPage - 1) * 10 + index + 1,
       }));
-
       if (newPage === 1) {
         setUsers(fetchedUsers);
         setOriginalUsers(fetchedUsers);
@@ -46,11 +43,11 @@ const useUserData = () => {
   useEffect(() => {
     setUsers(originalUsers.map((user) => ({
       ...user,
-      name: introduceErrors(user.name, errorRate),
-      address: introduceErrors(user.address, errorRate),
-      phone: introduceErrorInPhonenumber(user.phone, errorRate),
+      name: introduceErrors(user.name, errorRate.input),
+      address: introduceErrors(user.address, errorRate.input),
+      phone: introduceErrorInPhonenumber(user.phone, errorRate.input),
     })));
-  }, [errorRate, originalUsers]);
+  }, [errorRate.input, originalUsers]);
 
   const handleRegionChange = (e) => {
     const newRegion = e.target.value;
@@ -83,7 +80,7 @@ const useUserData = () => {
       const response = await axios.get('https://fake-user-data-generator-8wwh.onrender.com/api/export', {
         params: {
           region,
-          errorRate,
+          errorRate: errorRate.input,
           seed,
           page,
         },

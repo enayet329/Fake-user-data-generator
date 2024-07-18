@@ -43,7 +43,7 @@ const App = () => {
       <CssBaseline />
       <Container maxWidth="lg">
         <Box my={4}>
-          <Typography variant="h3" component="h1" gutterBottom>
+          <Typography variant="h4" component="h2" gutterBottom>
             Fake User Generator
           </Typography>
           <ControlPanel
