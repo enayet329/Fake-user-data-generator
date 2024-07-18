@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { introduceErrorInPhonenumber, introduceErrors } from './errorUtils';
@@ -23,7 +24,7 @@ const useUserData = () => {
 
       const fetchedUsers = response.data.users.map((user, index) => ({
         ...user,
-        index: (newPage - 1) * 20 + index + 1,
+        index: (newPage - 1) * 10 + index + 1,
       }));
 
       if (newPage === 1) {
@@ -36,7 +37,7 @@ const useUserData = () => {
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
-  }, []);
+  }, [seed, region]);
 
   useEffect(() => {
     fetchData(1, seed, region);
@@ -61,6 +62,7 @@ const useUserData = () => {
   };
 
   const handleErrorRateChange = (e, newValue) => setErrorRate(newValue);
+
   const handleSeedChange = () => {
     const newSeed = Math.floor(Math.random() * 10000);
     setSeed(newSeed);

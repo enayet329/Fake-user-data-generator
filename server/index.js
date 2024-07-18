@@ -1,3 +1,4 @@
+
 const express = require('express');
 const faker = require('faker');
 const cors = require('cors');
@@ -47,7 +48,7 @@ function generateFakeUsers(region, errorRate, perPage, page, seed) {
 
 app.get('/api/users', (req, res) => {
   const { region = 'USA', errorRate = 0, seed, page = 1 } = req.query;
-  const perPage = 20;
+  const perPage = 10; 
 
   if (!supportedRegions[region]) {
     return res.status(400).send(`Unsupported region: ${region}`);
