@@ -61,7 +61,9 @@ const useUserData = () => {
     fetchData(1, newSeed, newRegion);
   };
 
-  const handleErrorRateChange = (e, newValue) => setErrorRate(newValue);
+  const handleErrorRateChange = (newErrorRate) => {
+    setErrorRate(newErrorRate);
+  };
 
   const handleSeedChange = () => {
     const newSeed = Math.floor(Math.random() * 10000);
