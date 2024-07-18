@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, FormControl, InputLabel, Select, MenuItem, Slider, TextField, Button, Typography, Box } from '@mui/material';
 
 const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChange, onSeedChange }) => {
+  const [localErrorRate, setLocalErrorRate] = useState(errorRate);
+
+  useEffect(() => {
+    setLocalErrorRate(errorRate);
+  }, [errorRate]);
+
   const handleSliderChange = (event, newValue) => {
+    setLocalErrorRate(newValue);
     onErrorRateChange(newValue);
   };
 
   const handleInputChange = (event) => {
     const value = event.target.value === '' ? '' : Number(event.target.value);
-    onErrorRateChange(value);
+    if (value >= 0 && value <= 10) {
+      setLocalErrorRate(value);
+      onErrorRateChange(value);
+    }
   };
 
   return (
@@ -38,7 +48,7 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
           </Typography>
           <Box display="flex" alignItems="center">
             <Slider
-              value={typeof errorRate === 'number' ? errorRate : 0}
+              value={typeof localErrorRate === 'number' ? localErrorRate : 0}
               onChange={handleSliderChange}
               aria-labelledby="error-rate-slider"
               valueLabelDisplay="auto"
@@ -49,7 +59,7 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
               sx={{ mr: 2, flex: 1 }}
             />
             <TextField
-              value={errorRate}
+              value={localErrorRate}
               onChange={handleInputChange}
               inputProps={{
                 step: 0.1,
