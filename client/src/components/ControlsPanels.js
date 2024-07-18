@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, FormControl, InputLabel, Select, MenuItem, Slider, TextField, Button, Typography, Box } from '@mui/material';
 
-const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChange, onSeedChange, onErrorRateValueChange }) => {
+const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChange, onSeedChange }) => {
   return (
     <Grid container spacing={3} alignItems="center" mb={4}>
       <Grid item xs={12} sm={4}>
@@ -27,26 +27,16 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
           <Typography id="error-rate-slider" gutterBottom>
             Error Rate
           </Typography>
-          <Box display="flex" alignItems="center">
-            <Slider
-              value={errorRate}
-              onChange={(e, value) => onErrorRateChange(e, value * 100)}
-              aria-labelledby="error-rate-slider"
-              valueLabelDisplay="auto"
-              step={1}
-              marks
-              min={0}
-              max={10}
-              style={{ marginRight: '16px' }}
-            />
-            <TextField
-              value={errorRate}
-              onChange={onErrorRateValueChange}
-              type="number"
-              InputProps={{ inputProps: { min: 0, max: 1000 } }}
-              style={{ width: '80px' }}
-            />
-          </Box>
+          <Slider
+            value={errorRate}
+            onChange={onErrorRateChange}
+            aria-labelledby="error-rate-slider"
+            valueLabelDisplay="auto"
+            step={0.1}
+            marks
+            min={0}
+            max={10}
+          />
         </FormControl>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -55,11 +45,12 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
           label="Seed"
           type="number"
           value={seed}
+          onChange={(e) => onSeedChange(parseInt(e.target.value))}
           InputProps={{
             endAdornment: (
               <Button
                 variant="contained"
-                onClick={onSeedChange}
+                onClick={() => onSeedChange(Math.floor(Math.random() * 1000000))}
               >
                 Random
               </Button>
