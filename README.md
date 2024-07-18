@@ -21,7 +21,7 @@ This project consists of a React frontend and a backend API for generating and d
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/enayet329/Fake-user-generator
+    git clone https://github.com/enayet329/Fake-user-data-generator
     cd Fake-user-generator
     ```
 
@@ -29,12 +29,11 @@ This project consists of a React frontend and a backend API for generating and d
     ```bash
     npm install
     ```
-
 ### Backend
 
 1. Navigate to the backend directory:
     ```bash
-    cd ./backend
+    cd ./server
     ```
 
 2. Install dependencies:
@@ -48,6 +47,9 @@ This project consists of a React frontend and a backend API for generating and d
 
 1. Start the development server:
     ```bash
+    npm install
+    ```
+    ```bash
     npm start
     ```
 
@@ -57,34 +59,31 @@ This project consists of a React frontend and a backend API for generating and d
 
 1. Start the backend server:
     ```bash
-    node server.js
+    node index.js
     ```
 
-The backend will run on `http://localhost:3001`
+The backend will run on `http://localhost:5000`
 
 ## Project Structure
 
 - `frontend/`
   - `src/`
     - `App.js` - Main component that includes `Controls` and `RecordsTable`
-    - `Controls/`
-      - `Controls.js` - Component for user input to select region, errors, and seed
-    - `RecordsTable/`
-      - `RecordsTable.js` - Component to display the user data table with infinite scrolling
-      - `App.css` - CSS for styling the components
-
-- `backend/`
-  - `server.js` - Entry point for the backend server
+- `component/`
+    - `userTable.js` - Component to display the user data table with infinite scrolling
+    - `ControlsPanales.js` - Component for user input to select region, errors, and seed
+- `hook/`
+    - `useUserData.js` - Hook for faching user data from server
+    - `errorHandler.css` - Handdle user introduces
+- `server/`
+  - `index.js` - Entry point for the backend server
 
 ## API Endpoints
 
-- `POST /api/generate` - Generate new fake user data
+- `GET /api/generate` - Generate new fake user data
   - Body: `{ region, errors, seed, count }`
 - `GET /api/records` - Retrieve generated records
   - Query parameters: `page`, `limit`
-
-## Directory Structure
-
 
 ## Usage
 
@@ -99,10 +98,10 @@ The backend will run on `http://localhost:3001`
 6. Scroll through the table to view all generated records. The table supports infinite scrolling, fetching more data from the backend as needed.
 
 ## Authors
-
 - **Md Enayet Hossain**
   - Email: md.enayet.hossain329@gmail.com
 
 ## Contact
-
 For inquiries or support, visit [Md Enayet Hossain's Portfolio](https://portfolio-enayet-hossain.vercel.app/home).
+
+
