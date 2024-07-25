@@ -38,7 +38,6 @@ const useUserData = () => {
         updatedUsers.splice(startIndex, 10, ...fetchedUsers);
         return updatedUsers;
       });
-
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -72,8 +71,11 @@ const useUserData = () => {
     setErrorRate(newErrorRate);
   };
 
-  const handleSeedChange = () => {
-    const newSeed = Math.floor(Math.random() * 10000);
+  const handleSeedChange = (newSeed) => {
+    if (newSeed === undefined) {
+      // If no value is provided, generate a random seed
+      newSeed = Math.floor(Math.random() * 10000);
+    }
     setSeed(newSeed);
     fetchData(page, newSeed, region);
   };
