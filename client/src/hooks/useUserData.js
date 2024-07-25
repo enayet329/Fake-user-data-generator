@@ -12,7 +12,7 @@ const useUserData = () => {
 
   const fetchData = useCallback(async (newPage = page, newSeed = seed, newRegion = region) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users', {
+      const response = await axios.get('https://fake-user-data-generator-8wwh.onrender.com/api/users', {
         params: {
           region: newRegion,
           errorRate: 0,
