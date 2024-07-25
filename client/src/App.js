@@ -1,6 +1,5 @@
-
 import React, { useRef, useEffect } from 'react';
-import { ThemeProvider, CssBaseline, Container, Typography, Box, Button } from '@mui/material';
+import { ThemeProvider, CssBaseline, Container, Typography, Box } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import UserTable from './components/UserTable';
 import ControlPanel from './components/ControlsPanels';
@@ -53,12 +52,8 @@ const App = () => {
             onRegionChange={handleRegionChange}
             onErrorRateChange={handleErrorRateChange}
             onSeedChange={handleSeedChange}
+            onExport={downloadCSV}
           />
-          <Box mb={2} display="flex" justifyContent="flex-end">
-            <Button variant="contained" color="secondary" onClick={downloadCSV}>
-              Download CSV
-            </Button>
-          </Box>
           <UserTable users={users} loadMoreUsers={loadMoreUsers} tableContainerRef={tableContainerRef} />
         </Box>
       </Container>
