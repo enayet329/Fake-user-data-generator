@@ -28,13 +28,15 @@ const UserTable = ({ users, loadMoreUsers, tableContainerRef, loading }) => {
         </TableHead>
         <TableBody>
           {Array.isArray(users) && users.map((user, index) => (
-            <TableRow key={user.id} ref={index === users.length - 1 ? lastUserElementRef : null}>
-              <TableCell>{user.index}</TableCell>
-              <TableCell>{user.id}</TableCell>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.address}</TableCell>
-              <TableCell>{user.phone}</TableCell>
-            </TableRow>
+            user && (
+              <TableRow key={user.id || index} ref={index === users.length - 1 ? lastUserElementRef : null}>
+                <TableCell>{user.index || ''}</TableCell>
+                <TableCell>{user.id || ''}</TableCell>
+                <TableCell>{user.name || ''}</TableCell>
+                <TableCell>{user.address || ''}</TableCell>
+                <TableCell>{user.phone || ''}</TableCell>
+              </TableRow>
+            )
           ))}
         </TableBody>
       </Table>

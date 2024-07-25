@@ -9,8 +9,10 @@ const useUserData = () => {
   const [errorRate, setErrorRate] = useState({ slider: 0, input: 0 });
   const [seed, setSeed] = useState(42);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = useCallback(async (newPage = page, newSeed = seed, newRegion = region, isRegionChange = false) => {
+    setLoading(true);
     try {
       const response = await axios.get('https://fake-user-data-generator-8wwh.onrender.com/api/users', {
         params: {
@@ -20,10 +22,15 @@ const useUserData = () => {
           page: newPage,
         },
       });
-      const fetchedUsers = response.data.users.map((user, index) => ({
-        ...user,
-        index: (newPage - 1) * 10 + index + 1,
-      }));
+      const fetchedUsers = response.data.users
+        .filter(user => user != null)
+        .map((user, index) => ({
+          ...user,
+          index: (newPage - 1) * 10 + index + 1,
+          name: user.name || '',
+          address: user.address || '',
+          phone: user.phone || '',
+        }));
 
       if (isRegionChange) {
         setUsers(fetchedUsers);
@@ -54,6 +61,8 @@ const useUserData = () => {
       }
     } catch (error) {
       console.error('Error fetching data: ', error);
+    } finally {
+      setLoading(false);
     }
   }, [page, seed, region]);
 
@@ -64,12 +73,17 @@ const useUserData = () => {
   }, [region, seed, fetchData, page]);
 
   useEffect(() => {
-    setUsers(originalUsers.map((user) => ({
-      ...user,
-      name: introduceErrors(user.name, errorRate.input),
-      address: introduceErrors(user.address, errorRate.input),
-      phone: introduceErrorInPhonenumber(user.phone, errorRate.input),
-    })));
+    if (originalUsers.length > 0) {
+      setUsers(originalUsers.map((user) => {
+        if (!user) return null;
+        return {
+          ...user,
+          name: introduceErrors(user.name || '', errorRate.input),
+          address: introduceErrors(user.address || '', errorRate.input),
+          phone: introduceErrorInPhonenumber(user.phone || '', errorRate.input),
+        };
+      }).filter(Boolean));
+    }
   }, [errorRate.input, originalUsers]);
 
   const handleRegionChange = (e) => {
@@ -126,6 +140,7 @@ const useUserData = () => {
     region,
     errorRate,
     seed,
+    loading,
     handleRegionChange,
     handleErrorRateChange,
     handleSeedChange,
