@@ -1,10 +1,10 @@
-
 import React, { useRef, useCallback } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box } from '@mui/material';
 
-const UserTable = ({ users, loadMoreUsers, tableContainerRef }) => {
+const UserTable = ({ users, loadMoreUsers, tableContainerRef, loading }) => {
   const observer = useRef();
   const lastUserElementRef = useCallback(node => {
+    if (loading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
@@ -12,7 +12,7 @@ const UserTable = ({ users, loadMoreUsers, tableContainerRef }) => {
       }
     });
     if (node) observer.current.observe(node);
-  }, [loadMoreUsers]);
+  }, [loadMoreUsers, loading]);
 
   return (
     <TableContainer ref={tableContainerRef} component={Paper} style={{ maxHeight: '60vh', overflow: 'auto' }}>
@@ -38,6 +38,11 @@ const UserTable = ({ users, loadMoreUsers, tableContainerRef }) => {
           ))}
         </TableBody>
       </Table>
+      {loading && (
+        <Box display="flex" justifyContent="center" p={2}>
+          <CircularProgress />
+        </Box>
+      )}
     </TableContainer>
   );
 };

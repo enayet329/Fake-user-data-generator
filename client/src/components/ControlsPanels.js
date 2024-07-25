@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, FormControl, InputLabel, Select, MenuItem, Slider, TextField, Button, Typography, Box } from '@mui/material';
 
-const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChange, onSeedChange }) => {
+const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChange, onSeedChange, loading }) => {
   const handleSliderChange = (event, newValue) => {
     if (onErrorRateChange && newValue >= 0 && newValue <= 10) {
       onErrorRateChange({ slider: newValue, input: newValue });
@@ -13,6 +13,11 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
     if (onErrorRateChange && value >= 0 && value <= 1000) {
       onErrorRateChange({ slider: value, input: value });
     }
+  };
+
+  const handleRandomClick = (e) => {
+    e.preventDefault();
+    onSeedChange();
   };
 
   return (
@@ -78,9 +83,10 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
               endAdornment: (
                 <Button
                   variant="contained"
-                  onClick={() => onSeedChange(Math.floor(Math.random() * 1000000))}
+                  onClick={handleRandomClick}
+                  disabled={loading}
                 >
-                  Random
+                  Seed
                 </Button>
               ),
             }}

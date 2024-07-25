@@ -10,7 +10,7 @@ const useUserData = () => {
   const [seed, setSeed] = useState(42);
   const [page, setPage] = useState(1);
 
-  const fetchData = useCallback(async (newPage = 1, newSeed = seed, newRegion = region) => {
+  const fetchData = useCallback(async (newPage = page, newSeed = seed, newRegion = region) => {
     try {
       const response = await axios.get('https://fake-user-data-generator-8wwh.onrender.com/api/users', {
         params: {
@@ -24,21 +24,31 @@ const useUserData = () => {
         ...user,
         index: (newPage - 1) * 10 + index + 1,
       }));
-      if (newPage === 1) {
-        setUsers(fetchedUsers);
-        setOriginalUsers(fetchedUsers);
-      } else {
-        setUsers((prevUsers) => [...prevUsers, ...fetchedUsers]);
-        setOriginalUsers((prevUsers) => [...prevUsers, ...fetchedUsers]);
-      }
+
+      setUsers(prevUsers => {
+        const updatedUsers = [...prevUsers];
+        const startIndex = (newPage - 1) * 10;
+        updatedUsers.splice(startIndex, 10, ...fetchedUsers);
+        return updatedUsers;
+      });
+
+      setOriginalUsers(prevUsers => {
+        const updatedUsers = [...prevUsers];
+        const startIndex = (newPage - 1) * 10;
+        updatedUsers.splice(startIndex, 10, ...fetchedUsers);
+        return updatedUsers;
+      });
+
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
-  }, [seed, region]);
+  }, [page, seed, region]);
 
   useEffect(() => {
-    fetchData(1, seed, region);
-  }, [region, seed, fetchData]);
+    for (let i = 1; i <= page; i++) {
+      fetchData(i, seed, region);
+    }
+  }, [region, seed, fetchData, page]);
 
   useEffect(() => {
     setUsers(originalUsers.map((user) => ({
@@ -65,8 +75,7 @@ const useUserData = () => {
   const handleSeedChange = () => {
     const newSeed = Math.floor(Math.random() * 10000);
     setSeed(newSeed);
-    setPage(1);
-    fetchData(1, newSeed, region);
+    fetchData(page, newSeed, region);
   };
 
   const loadMoreUsers = useCallback(() => {
