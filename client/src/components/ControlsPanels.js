@@ -85,6 +85,7 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
             type="number"
             value={seed}
             onChange={handleSeedChange}
+            sx={{ width: 150 }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -92,7 +93,6 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
                     variant="contained"
                     onClick={handleRandomClick}
                     disabled={loading}
-                    sx={{ width: 150 }}
                   >
                     seed
                   </Button>
