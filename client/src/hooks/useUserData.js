@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { introduceErrorInPhonenumber, introduceErrors } from '../hooks/errorUtils';
+import { introduceErrorInPhonenumber, introduceErrors } from './errorUtils';
 
 const useUserData = () => {
   const [users, setUsers] = useState([]);
@@ -32,13 +32,23 @@ const useUserData = () => {
         setUsers(prevUsers => {
           const updatedUsers = [...prevUsers];
           const startIndex = (newPage - 1) * 10;
-          updatedUsers.splice(startIndex, 10, ...fetchedUsers);
+          fetchedUsers.forEach((user, index) => {
+            updatedUsers[startIndex + index] = {
+              ...user,
+              index: startIndex + index + 1
+            };
+          });
           return updatedUsers;
         });
         setOriginalUsers(prevUsers => {
           const updatedUsers = [...prevUsers];
           const startIndex = (newPage - 1) * 10;
-          updatedUsers.splice(startIndex, 10, ...fetchedUsers);
+          fetchedUsers.forEach((user, index) => {
+            updatedUsers[startIndex + index] = {
+              ...user,
+              index: startIndex + index + 1
+            };
+          });
           return updatedUsers;
         });
       }
