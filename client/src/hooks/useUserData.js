@@ -10,9 +10,9 @@ const useUserData = () => {
   const [seed, setSeed] = useState(42);
   const [page, setPage] = useState(1);
 
-  const fetchData = useCallback(async (newPage = page, newSeed = seed, newRegion = region) => {
+  const fetchData = useCallback(async (newPage = page, newSeed = seed, newRegion = region, isRegionChange = false) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users', {
+      const response = await axios.get('https://fake-user-data-generator-8wwh.onrender.com/api/users', {
         params: {
           region: newRegion,
           errorRate: 0,
@@ -25,19 +25,23 @@ const useUserData = () => {
         index: (newPage - 1) * 10 + index + 1,
       }));
 
-      setUsers(prevUsers => {
-        const updatedUsers = [...prevUsers];
-        const startIndex = (newPage - 1) * 10;
-        updatedUsers.splice(startIndex, 10, ...fetchedUsers);
-        return updatedUsers;
-      });
-
-      setOriginalUsers(prevUsers => {
-        const updatedUsers = [...prevUsers];
-        const startIndex = (newPage - 1) * 10;
-        updatedUsers.splice(startIndex, 10, ...fetchedUsers);
-        return updatedUsers;
-      });
+      if (isRegionChange) {
+        setUsers(fetchedUsers);
+        setOriginalUsers(fetchedUsers);
+      } else {
+        setUsers(prevUsers => {
+          const updatedUsers = [...prevUsers];
+          const startIndex = (newPage - 1) * 10;
+          updatedUsers.splice(startIndex, 10, ...fetchedUsers);
+          return updatedUsers;
+        });
+        setOriginalUsers(prevUsers => {
+          const updatedUsers = [...prevUsers];
+          const startIndex = (newPage - 1) * 10;
+          updatedUsers.splice(startIndex, 10, ...fetchedUsers);
+          return updatedUsers;
+        });
+      }
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -60,11 +64,11 @@ const useUserData = () => {
 
   const handleRegionChange = (e) => {
     const newRegion = e.target.value;
-    const newSeed = Math.floor(Math.random() * 10000);
+    const newSeed = 42;
     setRegion(newRegion);
     setSeed(newSeed);
     setPage(1);
-    fetchData(1, newSeed, newRegion);
+    fetchData(1, newSeed, newRegion, true);
   };
 
   const handleErrorRateChange = (newErrorRate) => {
@@ -87,7 +91,7 @@ const useUserData = () => {
 
   const downloadCSV = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/export', {
+      const response = await axios.get('https://fake-user-data-generator-8wwh.onrender.com/api/export', {
         params: {
           region,
           errorRate: errorRate.input,
