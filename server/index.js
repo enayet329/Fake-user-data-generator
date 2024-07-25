@@ -66,7 +66,7 @@ app.get('/api/users', (req, res) => {
 
 app.get('/api/export', (req, res) => {
   const { region = 'USA', errorRate = 0, seed, page = 1 } = req.query;
-  const perPage = 10;
+  const perPage = 100;
 
   if (!supportedRegions[region]) {
     return res.status(400).send(`Unsupported region: ${region}`);
