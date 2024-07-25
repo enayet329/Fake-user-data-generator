@@ -15,6 +15,11 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
     }
   };
 
+  const handleSeedChange = (e) => {
+    const value = e.target.value === '' ? '' : Number(e.target.value);
+    onSeedChange(value);
+  };
+
   const handleRandomClick = (e) => {
     e.preventDefault();
     onSeedChange();
@@ -78,7 +83,7 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
             label="Seed"
             type="number"
             value={seed}
-            onChange={(e) => onSeedChange(parseInt(e.target.value))}
+            onChange={handleSeedChange}
             InputProps={{
               endAdornment: (
                 <Button

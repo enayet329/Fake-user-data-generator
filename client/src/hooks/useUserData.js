@@ -12,7 +12,7 @@ const useUserData = () => {
 
   const fetchData = useCallback(async (newPage = page, newSeed = seed, newRegion = region) => {
     try {
-      const response = await axios.get('https://fake-user-data-generator-8wwh.onrender.com/api/users', {
+      const response = await axios.get('http://localhost:5000/api/users', {
         params: {
           region: newRegion,
           errorRate: 0,
@@ -38,7 +38,6 @@ const useUserData = () => {
         updatedUsers.splice(startIndex, 10, ...fetchedUsers);
         return updatedUsers;
       });
-
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -72,8 +71,11 @@ const useUserData = () => {
     setErrorRate(newErrorRate);
   };
 
-  const handleSeedChange = () => {
-    const newSeed = Math.floor(Math.random() * 10000);
+  const handleSeedChange = (newSeed) => {
+    if (newSeed === undefined) {
+      // If no value is provided, generate a random seed
+      newSeed = Math.floor(Math.random() * 10000);
+    }
     setSeed(newSeed);
     fetchData(page, newSeed, region);
   };
