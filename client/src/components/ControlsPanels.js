@@ -92,8 +92,9 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
                     variant="contained"
                     onClick={handleRandomClick}
                     disabled={loading}
+                    sx={{ width: 150 }}
                   >
-                    Random
+                    seed
                   </Button>
                 </InputAdornment>
               ),
