@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, FormControl, InputLabel, Select, MenuItem, Slider, TextField, Button, Typography, Box } from '@mui/material';
+import { Grid, FormControl, InputLabel, Select, MenuItem, Slider, TextField, Button, Typography, Box, InputAdornment } from '@mui/material';
 
 const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChange, onSeedChange, loading }) => {
   const handleSliderChange = (event, newValue) => {
@@ -15,9 +15,15 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
     }
   };
 
+  const handleSeedChange = (event) => {
+    const value = event.target.value;
+    onSeedChange(value ? parseInt(value) : '');
+  };
+
   const handleRandomClick = (e) => {
     e.preventDefault();
-    onSeedChange();
+    const randomSeed = Math.floor(Math.random() * 100000);
+    onSeedChange(randomSeed);
   };
 
   return (
@@ -78,16 +84,18 @@ const ControlPanel = ({ region, errorRate, seed, onRegionChange, onErrorRateChan
             label="Seed"
             type="number"
             value={seed}
-            onChange={(e) => onSeedChange(parseInt(e.target.value))}
+            onChange={handleSeedChange}
             InputProps={{
               endAdornment: (
-                <Button
-                  variant="contained"
-                  onClick={handleRandomClick}
-                  disabled={loading}
-                >
-                  Seed
-                </Button>
+                <InputAdornment position="end">
+                  <Button
+                    variant="contained"
+                    onClick={handleRandomClick}
+                    disabled={loading}
+                  >
+                    Random
+                  </Button>
+                </InputAdornment>
               ),
             }}
           />
